@@ -8,8 +8,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 columns_to_observe = ['close','Return_1d_stock','Return_3d_stock','Return_5d_stock','Return_10d_stock','Return_50d_stock','Return_100d_stock','Return_1d_Correlation','Return_3d_Correlation','Return_5d_Correlation','Return_10d_Correlation','Return_50d_Correlation','Return_100d_Correlation','ADX','Aroon_Up','Aroon_Down','CCI','EMA','KAMA','ROC','RSI','CMF','ADI','FI','Bollinger_high','Bollinger_low','Donchian_low','Donchian_high']
 
 
-ACTION_BOUND = 6
-
+ACTION_SCALE = 3.0
 class PortfolioEnv(Env):
     def __init__(self, observation_timeline:np.ndarray, data_timeline:np.ndarray, benchmark_timeline:np.ndarray,reward_period=10,risk_aversion=0.5):
         self.num_of_assets = data_timeline.shape[1]
@@ -20,7 +19,7 @@ class PortfolioEnv(Env):
         self.data_timeline = data_timeline
         self.benchmark_timeline = benchmark_timeline
         
-        self.action_space = spaces.Box(low=0, high=ACTION_BOUND, shape=(self.num_of_assets+1,)) # +1 for cash
+        self.action_space = spaces.Box(low=-1, high=1, shape=(self.num_of_assets+1,)) # +1 for cash
         
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.num_of_assets*len(columns_to_observe),))
         
@@ -69,7 +68,8 @@ class PortfolioEnv(Env):
         return weights,log_return,log_benchmark_return
         
     def calculate_weights(self,action:np.ndarray) -> np.ndarray:
-        exp_action = np.exp(action - np.max(action))
+        scaled_action = action*ACTION_SCALE
+        exp_action = np.exp(scaled_action - np.max(scaled_action))
         weights = exp_action/np.sum(exp_action)
         return np.round(weights,4)
         
