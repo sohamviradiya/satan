@@ -1,17 +1,25 @@
 from stable_baselines3 import SAC
+from typing import List, Tuple, TypeVar
 import torch
-from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
-from stable_baselines3.common.policies import ActorCriticPolicy
+from stable_baselines3.common.policies import ContinuousCritic
+from stable_baselines3.common.type_aliases import MaybeCallback
 from torch import nn,optim
 from stable_baselines3.common.utils import polyak_update
 import numpy as np
 
+N_QUANTILES = 10
+BETA = 0.6
+
+SelfSAC = TypeVar("SelfSAC", bound="SAC")
+
 class QuantileCriticNetwork(nn.Module):
-        def __init__(self, state_dim, action_dim, n_quantiles, learning_rate=3e-4):
+        def __init__(self, observation_space, action_space, learning_rate=3e-4,**kwargs):
             super(QuantileCriticNetwork, self).__init__()
+            state_dim = observation_space.shape[0]
+            action_dim = action_space.shape[0]
             self.fc1 = nn.Linear(state_dim + action_dim, 256)
             self.fc2 = nn.Linear(256, 256)
-            self.fc3 = nn.Linear(256, n_quantiles)
+            self.fc3 = nn.Linear(256, N_QUANTILES)
             self.optimizer = optim.Adam(self.parameters(), lr=learning_rate)
 
         def forward(self, state, action):
@@ -22,16 +30,22 @@ class QuantileCriticNetwork(nn.Module):
             return quantiles
 
 class DSAC(SAC):
-    def __init__(self, policy, env, learning_rate=3e-4, n_quantiles=5, **kwargs):
-        super(DSAC, self).__init__(policy, env, learning_rate=learning_rate, **kwargs)
-        self.n_quantiles = n_quantiles
-        self.critic = QuantileCriticNetwork(self.observation_space.shape[0], self.action_space.shape[0], n_quantiles)
-        self.critic_target = QuantileCriticNetwork(self.observation_space.shape[0], self.action_space.shape[0], n_quantiles)
+    def __init__(self,**kwargs):
+        super(DSAC, self).__init__(**kwargs)
+        self.n_quantiles = N_QUANTILES 
+        self.critic = QuantileCriticNetwork(self.observation_space, self.action_space,self.learning_rate)
+        self.critic_target = QuantileCriticNetwork(self.observation_space, self.action_space,self.learning_rate)
+        
+    def wang_distroted_q(self,quantiles):
+        t = torch.arange(0,1,1/self.n_quantiles)
+        g = torch.erf(torch.erfinv(t)+BETA)
+        weighted_quantiles = torch.matmul(quantiles,g)
+        return weighted_quantiles
 
     def actor_loss(self, replay_data):
         actions, log_prob = self.actor.action_log_prob(replay_data.observations)
         quantiles = self.critic(replay_data.observations, actions)
-        actor_loss = (log_prob * quantiles.mean(dim=1)).mean()
+        actor_loss = (log_prob * self.wang_distroted_q(quantiles)).mean()
         return actor_loss
     
     def soft_update(self, source, target, tau):
@@ -62,7 +76,7 @@ class DSAC(SAC):
             if self.use_sde:
                 self.actor.reset_noise()
                 
-            actions_pi, log_prob = self.actor.action_log_prob(replay_data.observations)
+            actions, log_prob = self.actor.action_log_prob(replay_data.observations)
             log_prob = log_prob.reshape(-1, 1)
 
             ent_coef_loss = None
@@ -97,8 +111,10 @@ class DSAC(SAC):
             self.critic.optimizer.zero_grad()
             critic_loss.backward()
             self.critic.optimizer.step()
-
-            actor_loss = self.actor_loss(replay_data)
+            
+            actions, log_prob = self.actor.action_log_prob(replay_data.observations)
+            quantiles = self.critic(replay_data.observations, actions)
+            actor_loss = (log_prob * self.wang_distroted_q(quantiles)).mean()
             actor_losses.append(actor_loss.item())
             self.actor.optimizer.zero_grad()
             actor_loss.backward()
@@ -117,6 +133,35 @@ class DSAC(SAC):
         self.logger.record("train/critic_loss", np.mean(critic_losses))
         if len(ent_coef_losses) > 0:
             self.logger.record("train/ent_coef_loss", np.mean(ent_coef_losses))
-        
+            
+    def learn(
+        self: SelfSAC,
+        total_timesteps: int,
+        callback: MaybeCallback = None,
+        log_interval: int = 4,
+        tb_log_name: str = "SAC",
+        reset_num_timesteps: bool = True,
+        progress_bar: bool = False,
+    ) -> SelfSAC:
+        return super().learn(
+            total_timesteps=total_timesteps,
+            callback=callback,
+            log_interval=log_interval,
+            tb_log_name=tb_log_name,
+            reset_num_timesteps=reset_num_timesteps,
+            progress_bar=progress_bar,
+        )
+
+    def _excluded_save_params(self) -> List[str]:
+        return super()._excluded_save_params() + ["actor", "critic", "critic_target"] 
+
+    def _get_torch_save_params(self) -> Tuple[List[str], List[str]]:
+        state_dicts = ["policy", "actor.optimizer", "critic.optimizer"]
+        if self.ent_coef_optimizer is not None:
+            saved_pytorch_variables = ["log_ent_coef"]
+            state_dicts.append("ent_coef_optimizer")
+        else:
+            saved_pytorch_variables = ["ent_coef_tensor"]
+        return state_dicts, saved_pytorch_variables
             
     
