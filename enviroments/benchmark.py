@@ -9,7 +9,7 @@ columns_to_observe = ['close','Return_1d_stock','Return_3d_stock','Return_5d_sto
 
 
 ACTION_SCALE = 3.0
-class PortfolioEnv(Env):
+class BenchMarkBasedEnv(Env):
     def __init__(self, observation_timeline:np.ndarray, data_timeline:np.ndarray, benchmark_timeline:np.ndarray,reward_period=10,risk_aversion=0.5):
         self.num_of_assets = data_timeline.shape[1]
         self.reward_period = reward_period
@@ -19,7 +19,7 @@ class PortfolioEnv(Env):
         self.data_timeline = data_timeline
         self.benchmark_timeline = benchmark_timeline
         
-        self.action_space = spaces.Box(low=-1, high=1, shape=(self.num_of_assets+1,)) # +1 for cash
+        self.action_space = spaces.Box(low=-1, high=1, shape=(self.num_of_assets+1,),dtype=np.float32) # +1 for cash
         
         self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(self.num_of_assets*len(columns_to_observe),))
         
@@ -89,10 +89,10 @@ class PortfolioEnv(Env):
     def render(self):
         print(f"Step: {self.current_step}, Prices: {self.data_timeline[self.current_step]}")
         
-def fetch_observations(tickers,period,start_date,end_date):
+def fetch_observations(tickers,period,start_date,end_date,benchmark_path):
     files = [f'./data/processed/{asset}.csv' for asset in tickers]
     assets = [pd.read_csv(file) for file in files]
-    benchmark = pd.read_csv('./data/djia.csv')
+    benchmark = pd.read_csv(benchmark_path)
     assets = [asset[(asset['date'] >= start_date) & (asset['date'] <= end_date)] for asset in assets]
     benchmark = benchmark[(benchmark['date'] >= start_date) & (benchmark['date'] <= end_date)]
     dates = np.array(benchmark['date'].values)
@@ -113,9 +113,9 @@ def fetch_observations(tickers,period,start_date,end_date):
     observations_array = np.array(observations).transpose(2, 0, 1)
     return prices_array, benchmark_array, observations_array, dates
 
-def create_env(tickers,start_date,end_date,investment_period=1,reward_period=20,risk_aversion=0.5):
-    prices, benchmark, observations, dates = fetch_observations(tickers,investment_period,start_date,end_date)
-    env = PortfolioEnv(observations,prices,benchmark,reward_period,risk_aversion)
+def create_env_benchmark(tickers,start_date,end_date,investment_period=1,reward_period=20,benchmark_path='./data/djia.csv',risk_aversion=0.5):
+    prices, benchmark, observations, dates = fetch_observations(tickers,investment_period,start_date,end_date,benchmark_path)
+    env = BenchMarkBasedEnv(observations,prices,benchmark,reward_period,risk_aversion)
     check_env(env)
     return DummyVecEnv([lambda: env]),dates,benchmark,prices.T
 
