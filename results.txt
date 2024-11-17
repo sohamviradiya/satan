@@ -1,0 +1,12 @@
+paper Sharpe Ratio: 0.0660169351874154,  Information Ratio: -0.18598381195932664, Final Portfolio Worth: 1.0977869585348892
+SAC benchmark risk 0 Sharpe Ratio: 0.43972560128606997,  Information Ratio: 0.3891780250870031, Final Portfolio Worth: 1.1999836775780335
+SAC benchmark risk 0.25 Sharpe Ratio: 0.4010796207393547,  Information Ratio: 0.36533347304046426, Final Portfolio Worth: 1.2548644694829554
+SAC benchmark risk 0.5 Sharpe Ratio: 0.07587331956309815,  Information Ratio: -0.12956628268533915, Final Portfolio Worth: 1.109119428091212
+SAC benchmark risk 0.75 Sharpe Ratio: 0.12960898982929306,  Information Ratio: -0.03183264703466946, Final Portfolio Worth: 1.1636418099034056
+SAC benchmark risk 1 Sharpe Ratio: 0.12960898982929306,  Information Ratio: -0.03183264703466946, Final Portfolio Worth: 1.1636418099034056
+SAC max gain risk 0 Sharpe Ratio: -0.09456865527923776,  Information Ratio: -0.2856109293082706, Final Portfolio Worth: 0.9956475524060298
+SAC max gain risk 0.25 Sharpe Ratio: -0.11130712231213687,  Information Ratio: -0.2591365980620381, Final Portfolio Worth: 0.9750864171787172
+SAC max gain risk 0.5 Sharpe Ratio: 0.4279448311031355,  Information Ratio: 0.5033450419773816, Final Portfolio Worth: 1.2150760669094074
+SAC max gain risk 0.75 Sharpe Ratio: 0.24743697379722698,  Information Ratio: 0.1589605368077691, Final Portfolio Worth: 1.254454884641276
+SAC max gain risk 1 Sharpe Ratio: 0.01813080063534646,  Information Ratio: -0.16367639973683495, Final Portfolio Worth: 1.085997709931885
+
