@@ -4,3 +4,4 @@ __pycache__/
 data/
 models/
 ppo_portfolio_model.zip
+.vscode/
