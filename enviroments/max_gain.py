@@ -76,12 +76,11 @@ class MaxGainEnv(Env):
         diff = np.array(self.portfolio_returns) - np.array(self.max_returns)
         mean_diff = np.mean(diff)
         var_diff = np.var(diff)
-        corr = np.cov(self.portfolio_returns,self.max_returns)[0,1]/(np.std(self.portfolio_returns)*np.std(self.max_returns))
         
         self.portfolio_returns.pop(0)
         self.max_returns.pop(0)
         
-        return mean_diff*(1-corr) - self.risk_aversion*var_diff
+        return mean_diff - self.risk_aversion*var_diff
     
     def render(self):
         print(f"Step: {self.current_step}, Prices: {self.data_timeline[self.current_step]}")

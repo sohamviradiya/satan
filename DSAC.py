@@ -39,7 +39,9 @@ class DSAC(SAC):
     def wang_distroted_q(self,quantiles):
         t = torch.arange(0,1,1/self.n_quantiles)
         g = torch.erf(torch.erfinv(t)+BETA)
-        weighted_quantiles = torch.matmul(quantiles,g)
+        diff_g = g[1:] - g[:-1]
+        diff_g = torch.cat([torch.tensor([0.0]),diff_g])
+        weighted_quantiles = torch.matmul(quantiles,diff_g)
         return weighted_quantiles
 
     def actor_loss(self, replay_data):
