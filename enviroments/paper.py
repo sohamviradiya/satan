@@ -5,8 +5,9 @@ import numpy as np
 from stable_baselines3.common.env_checker import check_env
 from stable_baselines3.common.vec_env import DummyVecEnv
 
+
 ACTION_SCALE = 3.0
-class BenchMarkBasedEnv(Env):
+class PaperEnv(Env):
     def __init__(self, observation_timeline:np.ndarray, data_timeline:np.ndarray, benchmark_timeline:np.ndarray,reward_period=10,risk_aversion=0.5):
         self.num_of_assets = data_timeline.shape[1]
         self.reward_period = reward_period
@@ -76,7 +77,6 @@ class BenchMarkBasedEnv(Env):
         diff = np.array(self.portfolio_returns) - np.array(self.benchmark_returns)
         mean_diff = np.mean(diff)
         var_diff = np.var(diff)
-        
         var_port = np.var(self.portfolio_returns)
         var_bench = np.var(self.benchmark_returns)
         
@@ -93,9 +93,11 @@ class BenchMarkBasedEnv(Env):
     
     def render(self):
         print(f"Step: {self.current_step}, Prices: {self.data_timeline[self.current_step]}")
-
-def create_env_benchmark(prices, benchmark, observations,reward_period=20,risk_aversion=0.5):
-    env = BenchMarkBasedEnv(observations,prices,benchmark,reward_period=reward_period,risk_aversion=risk_aversion)
+        
+def create_env_paper(prices, benchmark, observations,reward_period=20):
+    env = PaperEnv(observations,prices,benchmark,reward_period)
     check_env(env)
     return DummyVecEnv([lambda: env])
+
+
 
