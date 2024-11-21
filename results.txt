@@ -6,7 +6,6 @@ Sharpe Ratio: 0.0873537644358698,  Information Ratio: -0.021340157611081326, Fin
 DSAC paper
 Sharpe Ratio: 0.23298820859506592,  Information Ratio: -0.0064708857198310455, Final Portfolio Worth: 1.4259875529768093, Max Drawdown: 0.25236526109653573
 
-
 DSAC benchmark 0.5
 Using cpu device
 Sharpe Ratio: 0.26010290560478544,  Information Ratio: 0.028468210438790977, Final Portfolio Worth: 1.3473892219328996, Max Drawdown: 0.15674627298126645
@@ -15,10 +14,18 @@ Sharpe Ratio: 0.4051268227272632,  Information Ratio: 0.21970894510577535, Final
 DSAC benchmark 1
 Sharpe Ratio: 0.36598414569833754,  Information Ratio: 0.20539347548493334, Final Portfolio Worth: 1.7548465661675727, Max Drawdown: 0.248388693845403
 
-
 DSAC max gain 0.5
 Sharpe Ratio: 0.2642038403504579,  Information Ratio: 0.04393229453727777, Final Portfolio Worth: 1.4457073676510943, Max Drawdown: 0.16724941926545994
 DSAC max gain 0.75
 Sharpe Ratio: 0.26263714789317316,  Information Ratio: 0.025265323640649373, Final Portfolio Worth: 1.4292256044852691, Max Drawdown: 0.22577583901995202
 DSAC max gain 1
 Sharpe Ratio: 0.4392164911472102,  Information Ratio: 0.2464336664575102, Final Portfolio Worth: 1.7791516154436093, Max Drawdown: 0.15964275761864122
+
+SP500
+Sharpe Ratio: 0.2904307082040377, Final Portfolio Worth: 1.6220342200168119, Max Drawdown: 0.2087877582633815
+
+DJIA
+Sharpe Ratio: 0.25630702751729637, Final Portfolio Worth: 1.4554376497114505, Max Drawdown: 0.1713469525507334
+
+Russell
+Sharpe Ratio: 0.09706592764948303,  Final Portfolio Worth: 1.1950861036738596, Max Drawdown: 0.2404704330622115
