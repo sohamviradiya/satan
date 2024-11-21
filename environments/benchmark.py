@@ -30,11 +30,11 @@ class BenchMarkBasedEnv(Env):
     def reset(self,seed=None):
         self.current_step = 0
         self.current_worth = 1.0
-        info = {"portfolio_worth":self.current_worth,"weights":np.zeros(self.num_of_assets+1)}
+        info = {"portfolio_worth":self.current_worth,"weights":np.zeros(self.num_of_assets+1),"return":0}
         return self.get_observation(),info
     
     def step(self,action):
-        weights = self.evaluate_action(action)
+        weights, log_return = self.evaluate_action(action)
         
         done = False
         reward = self.calculate_reward()
@@ -44,7 +44,7 @@ class BenchMarkBasedEnv(Env):
         if self.current_step >= len(self.data_timeline)-1:
             done = True
             self.current_step = 0
-        info = {"portfolio_worth":self.current_worth,"weights":weights}
+        info = {"portfolio_worth":self.current_worth,"weights":weights,"return":log_return}
         return self.get_observation(), reward, done,False , info
     
     def get_observation(self):
@@ -62,7 +62,7 @@ class BenchMarkBasedEnv(Env):
         self.portfolio_returns.append(log_return)
         self.benchmark_returns.append(log_benchmark_return)
         
-        return weights,log_return,log_benchmark_return
+        return weights,log_return
         
     def calculate_weights(self,action:np.ndarray) -> np.ndarray:
         scaled_action = action*ACTION_SCALE

@@ -1,12 +1,24 @@
-Min Risk Sharpe Ratio: 0.1585066266418099,  Information Ratio: 0.036752190872044004, Final Portfolio Worth: 1.4716057148586068, Max Drawdown: 0.9993610754327897
-Risk Parity Sharpe Ratio: 0.19206859998540196,  Information Ratio: 0.0586637986727892, Final Portfolio Worth: 1.536322644442293, Max Drawdown: 0.8347211321777757
+Min Risk
+Sharpe Ratio: 0.07233928108839598,  Information Ratio: -0.03676890834417772, Final Portfolio Worth: 1.3161702986084967, Max Drawdown: 0.47960936902118073
+Risk Parity
+Sharpe Ratio: 0.0873537644358698,  Information Ratio: -0.021340157611081326, Final Portfolio Worth: 1.3597831532743663, Max Drawdown: 0.4643444573752519
 
-DSAC paper Sharpe Ratio: 0.23687038924724252,  Information Ratio: 0.01363126945715571, Final Portfolio Worth: 1.4259875529768093, Max Drawdown: 0.38926865735996063
+DSAC paper
+Sharpe Ratio: 0.23298820859506592,  Information Ratio: -0.0064708857198310455, Final Portfolio Worth: 1.4259875529768093, Max Drawdown: 0.25236526109653573
 
-DSAC benchmark 0.5 Sharpe Ratio: 0.1937349520092082,  Information Ratio: -0.033775503954451246, Final Portfolio Worth: 1.3473892219328996, Max Drawdown: 0.32211720811603783
-DSAC benchmark 0.75 Sharpe Ratio: 0.3651939660397105,  Information Ratio: 0.16517466818348395, Final Portfolio Worth: 1.5637305769154877, Max Drawdown: 0.32848548212855366
-DSAC benchmark 1 Sharpe Ratio: 0.3681388413402712,  Information Ratio: 0.23427182491085288, Final Portfolio Worth: 1.7548465661675727, Max Drawdown: 0.5351133862098258
 
-DSAC max gain 0.5 Sharpe Ratio: 0.26166669643660023,  Information Ratio: 0.03064700709667224, Final Portfolio Worth: 1.4457073676510943, Max Drawdown: 0.38579689397843064
-DSAC max gain 0.75 Sharpe Ratio: 0.22202483465980596,  Information Ratio: 0.0048528156204851215, Final Portfolio Worth: 1.4292256044852691, Max Drawdown: 0.3478178870104204
-DSAC max gain 1 Sharpe Ratio: 0.40742636491480383,  Information Ratio: 0.20944296498573056, Final Portfolio Worth: 1.7791516154436093, Max Drawdown: 0.3603652029253146
+DSAC benchmark 0.5
+Using cpu device
+Sharpe Ratio: 0.26010290560478544,  Information Ratio: 0.028468210438790977, Final Portfolio Worth: 1.3473892219328996, Max Drawdown: 0.15674627298126645
+DSAC benchmark 0.75
+Sharpe Ratio: 0.4051268227272632,  Information Ratio: 0.21970894510577535, Final Portfolio Worth: 1.5637305769154877, Max Drawdown: 0.1513491402287304
+DSAC benchmark 1
+Sharpe Ratio: 0.36598414569833754,  Information Ratio: 0.20539347548493334, Final Portfolio Worth: 1.7548465661675727, Max Drawdown: 0.248388693845403
+
+
+DSAC max gain 0.5
+Sharpe Ratio: 0.2642038403504579,  Information Ratio: 0.04393229453727777, Final Portfolio Worth: 1.4457073676510943, Max Drawdown: 0.16724941926545994
+DSAC max gain 0.75
+Sharpe Ratio: 0.26263714789317316,  Information Ratio: 0.025265323640649373, Final Portfolio Worth: 1.4292256044852691, Max Drawdown: 0.22577583901995202
+DSAC max gain 1
+Sharpe Ratio: 0.4392164911472102,  Information Ratio: 0.2464336664575102, Final Portfolio Worth: 1.7791516154436093, Max Drawdown: 0.15964275761864122
